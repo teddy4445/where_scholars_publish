@@ -7,6 +7,7 @@ import time
 import shutil
 import requests
 import pandas as pd
+from bs4 import BeautifulSoup
 
 # project imports
 from consts import *
@@ -37,14 +38,17 @@ class DLPBdataLoader:
             # download data
             response = requests.get(DLPB_DATA_URL)
             zip_file_path = os.path.join(os.path.dirname(__file__), RAW_DATA_FOLDER, DLPB_DATA_ZIP)
+            print("DLPBdataLoader.run: download dplb data as zip file")
             with open(zip_file_path, 'wb') as file:
                 file.write(response.content)
             # download dtd
             response = requests.get(DLPB_DATA_URL_DTD)
             dtd_file_path = os.path.join(os.path.dirname(__file__), RAW_DATA_FOLDER, DLPB_DATA_DTD)
+            print("DLPBdataLoader.run: download dplb dtd file")
             with open(dtd_file_path, 'wb') as file:
                 file.write(response.content)
             # unzip data
+            print("DLPBdataLoader.run: unzip data")
             with gzip.open(zip_file_path, 'rb') as f_in:
                 with open(xml_file_path, 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
@@ -55,6 +59,7 @@ class DLPBdataLoader:
         # Parse a row-level, remember authors in a dict and add the article's journal
         # Update the dict as needed by count the numbers
         answer = {}
+        connections = 0
 
         in_article_flag = False
         in_article_text = []
@@ -69,27 +74,36 @@ class DLPBdataLoader:
                     # count line and print from some time to time
                     line_number += 1
                     if (line_number % DLPB_PARSE_PRINT_EACH) == 0:
-                        print("Parse {} lines with {} authors so far after {:.3f} seconds".format(line_number,
-                                                                                                  len(answer),
-                                                                                                  time.time() - start_time))
+                        print("Parse {} lines with {} authors and {} connections so far after {:.3f} seconds".format(line_number,
+                                                                                                                     len(answer),
+                                                                                                                     connections,
+                                                                                                                     time.time() - start_time))
+
+                        print("DLPBdataLoader.run: save temp file to {}".format(save_path))
+                        with open(save_path, "w") as answer_file:
+                            json.dump(answer, answer_file)
 
                     # read data
                     if in_article_flag:
-                        if "</article>" in line:
+                        if any([option in line for option in DLPB_TYPES_LINE_END]):
                             in_article_flag = False
 
                             # find the journal name
-                            for line in in_article_text:
-                                if "<journal>" in line:
-                                    journal_name = line.replace("<journal>", "").replace("</journal>", "").strip().lower()
-                                    journal_name = re.search("[a-zA-Z\s]+", journal_name)[0]
+                            for inner_line in in_article_text:
+                                is_found = False
+                                for option in DLPB_TYPES:
+                                    if option in inner_line:
+                                        journal_name = BeautifulSoup(inner_line, "html.parser").text.strip().lower()
+                                        is_found = True
+                                        break
+                                if is_found:
                                     break
 
-                            for line in in_article_text:
-                                if "<author>" not in line:
+                            for inner_line in in_article_text:
+                                if "<author>" not in inner_line:
                                     continue
-                                author_text = line.replace("<author>", "").replace("</author>", "").strip().lower()
-                                author_text = re.search("[a-zA-Z\s]+", author_text)[0]
+                                author_text = re.search("[a-zA-Z\s]+", BeautifulSoup(inner_line, "html.parser").text)[0].strip().lower()
+
                                 try:
                                     # check if we have this author
                                     answer[author_text]
@@ -97,7 +111,7 @@ class DLPBdataLoader:
                                     try:
                                         # check if we have this journal for this author
                                         answer[author_text][journal_name]
-                                        # if we do, count this publicaiton
+                                        # if we do, count this publication
                                         answer[author_text][journal_name] += 1
                                     except KeyError as error:
                                         # if we do not have this journal, it is the first time
@@ -105,16 +119,22 @@ class DLPBdataLoader:
                                 except KeyError as error:
                                     # if we do not have this author, it is a new author and new journal with 1 count
                                     answer[author_text] = {journal_name: 1}
+                                # count connection between author and journal
+                                connections += 1
                         else:
                             # parse data inside an article
                             in_article_text.append(line)
                             continue
                     # check if we need to start collecting
-                    if "<article " in line:
-                        in_article_flag = True
-                        in_article_text = []
+                    else:
+                        for option in DLPB_TYPES_LINE:
+                            if option in line:
+                                in_article_flag = True
+                                in_article_text = []
+                                break
                 except Exception as error:
                     print("Error in line {}, saying {}".format(line_number, error))
 
+        print("DLPBdataLoader.run: analyzed data and save to {}".format(save_path))
         with open(save_path, "w") as answer_file:
             json.dump(answer, answer_file)
