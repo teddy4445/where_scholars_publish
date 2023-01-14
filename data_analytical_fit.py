@@ -29,17 +29,17 @@ class DataAnalyticalFit:
         x = list(range(1, 1+len(data)))
         best_r2 = 0
         best_func = ""
-        params = None
+        params = [0]
         for name, func in fit_funcs.items():
             try:
                 popt, pcov = curve_fit(func, x, data)
-                y_pred = func(x, *popt)
+                y_pred = func(np.array(x), *popt)
                 r2 = r2_score(data, y_pred)
                 if r2 > best_r2:
                     best_r2 = r2
                     best_func = name
                     params = popt
-            except:
+            except Exception as error:
                 pass
         return best_func, params, best_r2
 

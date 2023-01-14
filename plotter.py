@@ -72,7 +72,7 @@ class Plotter:
         # add the fitting
         best_func, params, best_r2 = DataAnalyticalFit.fit_data(data=y)
         plt.plot(x,
-                 fit_funcs[best_func](x, *params),
+                 fit_funcs[best_func](np.asarray(x), *params),
                  "--",
                  color="black",
                  label="$y = {} | R^2={:.3f}$".format(fit_string_funcs[best_func].format(*params), best_r2))

@@ -64,4 +64,5 @@ class Analyzer:
                                    ylim=(0, max(y)+1),
                                    xlim=(0.5, max(x)+0.5))
         except KeyError as error:
-            print("Cannot compute Analyzer.author_journal_dist with author_name={}".format(author_name))
+            print("Cannot compute Analyzer.author_journal_dist with author_name={}, because={}".format(author_name,
+                                                                                                       error))

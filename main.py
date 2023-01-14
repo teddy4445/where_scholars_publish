@@ -45,10 +45,11 @@ class Main:
                                                                         RESULTS_FOLDER,
                                                                         "author_journals_count_zoom.pdf"))
 
-        analyzer.author_journal_dist(author_name="felix lazebnik",
+        author_name = "felix lazebnik"
+        analyzer.author_journal_dist(author_name=author_name,
                                      plot_save_path=os.path.join(os.path.dirname(__file__),
                                                                  RESULTS_FOLDER,
-                                                                 "author_journal_dist_felix_lazebnik.pdf"))
+                                                                 "author_journal_dist_{}.pdf".format(author_name)))
 
 
 if __name__ == '__main__':
