@@ -9,9 +9,9 @@ DLPB_DATA_ZIP = "dblp.xml.gz"
 DLPB_DATA_DTD = "dblp.dtd"
 
 # parse related
-DLPB_TYPES = ["<journal>", "<booktitle>"]
-DLPB_TYPES_LINE = ["<article ", "<inproceedings "]
+DLPB_TYPES = ["journal", "booktitle"]
 DLPB_TYPES_LINE_END = ["</article>", "</inproceedings>"]
+DLPB_TOO_LARGE_MEMORY = 250
 
 # prints related
-DLPB_PARSE_PRINT_EACH = 1000000
+DLPB_PARSE_PRINT_EACH = 100000
