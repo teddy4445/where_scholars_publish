@@ -61,8 +61,7 @@ class DLPBdataLoader:
         answer = {}
         connections = 0
 
-        in_article_flag = False
-        in_article_text = []
+        in_article_lines = ["<object>"]
         # start clock
         start_time = time.time()
         # open xml file as txt file
@@ -83,55 +82,44 @@ class DLPBdataLoader:
                         with open(save_path, "w") as answer_file:
                             json.dump(answer, answer_file)
 
-                    # read data
-                    if in_article_flag:
-                        if any([option in line for option in DLPB_TYPES_LINE_END]):
-                            in_article_flag = False
-
-                            # find the journal name
-                            for inner_line in in_article_text:
-                                is_found = False
-                                for option in DLPB_TYPES:
-                                    if option in inner_line:
-                                        journal_name = BeautifulSoup(inner_line, "html.parser").text.strip().lower()
-                                        is_found = True
-                                        break
-                                if is_found:
-                                    break
-
-                            for inner_line in in_article_text:
-                                if "<author>" not in inner_line:
-                                    continue
-                                author_text = re.search("[a-zA-Z\s]+", BeautifulSoup(inner_line, "html.parser").text)[0].strip().lower()
-
+                    # check if we need to process
+                    if any([option in line for option in DLPB_TYPES_LINE_END]):
+                        # generate the xml text for processing
+                        in_article_lines.append("</object>")
+                        object_tree = BeautifulSoup("\n".join(in_article_lines), "html.parser")
+                        # get the journal name
+                        published_at = object_tree.find(DLPB_TYPES[0])
+                        if published_at is None:
+                            published_at = object_tree.find(DLPB_TYPES[1])
+                        published_at = published_at.text.strip().lower()
+                        for author_obj in object_tree.find_all("author"):
+                            author_text = re.search("[a-zA-Z\s]+", author_obj.text)[0].strip().lower()
+                            try:
+                                # check if we have this author
+                                answer[author_text]
+                                # if we do, add journal
                                 try:
-                                    # check if we have this author
-                                    answer[author_text]
-                                    # if we do, add journal
-                                    try:
-                                        # check if we have this journal for this author
-                                        answer[author_text][journal_name]
-                                        # if we do, count this publication
-                                        answer[author_text][journal_name] += 1
-                                    except KeyError as error:
-                                        # if we do not have this journal, it is the first time
-                                        answer[author_text][journal_name] = 1
+                                    # check if we have this journal for this author
+                                    answer[author_text][published_at]
+                                    # if we do, count this publication
+                                    answer[author_text][published_at] += 1
                                 except KeyError as error:
-                                    # if we do not have this author, it is a new author and new journal with 1 count
-                                    answer[author_text] = {journal_name: 1}
-                                # count connection between author and journal
-                                connections += 1
-                        else:
-                            # parse data inside an article
-                            in_article_text.append(line)
-                            continue
-                    # check if we need to start collecting
-                    else:
-                        for option in DLPB_TYPES_LINE:
-                            if option in line:
-                                in_article_flag = True
-                                in_article_text = []
-                                break
+                                    # if we do not have this journal, it is the first time
+                                    answer[author_text][published_at] = 1
+                            except KeyError as error:
+                                # if we do not have this author, it is a new author and new journal with 1 count
+                                answer[author_text] = {published_at: 1}
+                            # count connection between author and journal
+                            connections += 1
+                        # reset to start
+                        in_article_lines = ["<object>"]
+
+                    else:  # just recall the line
+                        in_article_lines.append(line)
+                        # IMPORTANT: edge case - we have "www" section, so clear memory if too large
+                        if len(in_article_lines) > DLPB_TOO_LARGE_MEMORY:
+                            in_article_lines = ["<object>"]
+
                 except Exception as error:
                     print("Error in line {}, saying {}".format(line_number, error))
 

@@ -2,12 +2,14 @@
 import os
 import json
 import time
+import pandas as pd
 
 # project imports
 from consts import *
 from fit_functions import *
 from plotter import Plotter
 from data_analytical_fit import DataAnalyticalFit
+from research_type_profiler import ResearchTypeProfiler
 
 
 class Analyzer:
@@ -173,3 +175,24 @@ class Analyzer:
                         y_err=[val[1] for val in fit_stats.values()],
                         x_names=list(fit_funcs.keys()),
                         save_path=os.path.join(folder_save_path, "r2_dist.pdf"))
+
+    @staticmethod
+    def cluster_author_journal(x_train: pd.DataFrame,
+                               x_test: pd.DataFrame,
+                               y_test: pd.Series,
+                               cluster_n: int,
+                               save_path: str):
+        """
+        Check if we can cluster the data properly with some hypothesis we have
+        The hypothesis check is reflected using the test set where one declares which
+        samples in x_test should be in the same cluster using the y_test vector
+        """
+        # train the clusters
+        cluster_model = ResearchTypeProfiler(cluster_n=cluster_n)
+        cluster_model.train(x=x_train)
+        test_results = cluster_model.test(x=x_test,
+                                          y=y_test)
+        with open(save_path, "w") as result_file:
+            json.dump(test_results,
+                      result_file,
+                      indent=2)
