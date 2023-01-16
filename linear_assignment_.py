@@ -14,14 +14,6 @@ import numpy as np
 import warnings
 
 
-# Deprecation warning for module
-warnings.warn(
-    "The linear_assignment_ module is deprecated in 0.21 "
-    "and will be removed from 0.23. Use "
-    "scipy.optimize.linear_sum_assignment instead.",
-    FutureWarning)
-
-
 def linear_assignment(X):
     """Solve the linear assignment problem using the Hungarian algorithm.
 
@@ -121,11 +113,6 @@ def _hungarian(cost_matrix):
         The pairs of (row, col) indices in the original array giving
         the original ordering.
     """
-    warnings.warn(
-        "The linear_assignment function is deprecated in 0.21 "
-        "and will be removed from 0.23. Use "
-        "scipy.optimize.linear_sum_assignment instead.",
-        FutureWarning)
 
     state = _HungarianState(cost_matrix)
 

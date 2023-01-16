@@ -12,6 +12,7 @@ DLPB_DATA_DTD = "dblp.dtd"
 DLPB_TYPES = ["journal", "booktitle"]
 DLPB_TYPES_LINE_END = ["</article>", "</inproceedings>"]
 DLPB_TOO_LARGE_MEMORY = 250
+CLUSTER_X_LENGTH = 20
 
 # prints related
 DLPB_PARSE_PRINT_EACH = 100000

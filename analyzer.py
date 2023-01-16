@@ -176,12 +176,50 @@ class Analyzer:
                         x_names=list(fit_funcs.keys()),
                         save_path=os.path.join(folder_save_path, "r2_dist.pdf"))
 
-    @staticmethod
-    def cluster_author_journal(x_train: pd.DataFrame,
-                               x_test: pd.DataFrame,
-                               y_test: pd.Series,
+    def cluster_author_journal(self,
+                               test_names: list,
+                               y_test: list,
                                cluster_n: int,
                                save_path: str):
+        # prepare x_train and x_test
+        x_test = []
+        for name in test_names:
+            x_row = Analyzer._author_json_to_vector(author_journal_data=self.data[name])
+            # TODO: maybe we can fix the length better?
+            # fix the size in a stupid way
+            if len(x_row) < CLUSTER_X_LENGTH:
+                x_row.extend([0 for _ in range(CLUSTER_X_LENGTH - len(x_row))])
+            else:
+                x_row = x_row[:CLUSTER_X_LENGTH]
+            x_test.append(x_row)
+        x_train = []
+        for name, val in self.data.items():
+            x_row = Analyzer._author_json_to_vector(author_journal_data=self.data[name])
+            # TODO: maybe we can fix the length better?
+            # fix the size in a stupid way
+            if len(x_row) < CLUSTER_X_LENGTH:
+                x_row.extend([0 for _ in range(CLUSTER_X_LENGTH - len(x_row))])
+            else:
+                x_row = x_row[:CLUSTER_X_LENGTH]
+            x_train.append(x_row)
+        # make pd.DataFrame
+        x_train = pd.DataFrame(x_train,
+                               columns=["j{}".format(i + 1) for i in range(CLUSTER_X_LENGTH)])
+        x_test = pd.DataFrame(x_test,
+                              columns=["j{}".format(i + 1) for i in range(CLUSTER_X_LENGTH)])
+        # compute
+        return Analyzer.cluster_author_journal_data_ready(x_train=x_train,
+                                                          x_test=x_test,
+                                                          y_test=y_test,
+                                                          cluster_n=cluster_n,
+                                                          save_path=save_path)
+
+    @staticmethod
+    def cluster_author_journal_data_ready(x_train: pd.DataFrame,
+                                          x_test: pd.DataFrame,
+                                          y_test: list,
+                                          cluster_n: int,
+                                          save_path: str):
         """
         Check if we can cluster the data properly with some hypothesis we have
         The hypothesis check is reflected using the test set where one declares which
@@ -196,3 +234,11 @@ class Analyzer:
             json.dump(test_results,
                       result_file,
                       indent=2)
+
+    @staticmethod
+    def _author_json_to_vector(author_journal_data: dict):
+        data_as_list = [(name, count) for name, count in author_journal_data.items()]
+        data_as_list = sorted(data_as_list,
+                              key=lambda x: x[1],
+                              reverse=True)
+        return [val[1] for val in data_as_list]

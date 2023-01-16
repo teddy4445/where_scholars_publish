@@ -28,25 +28,25 @@ class ResearchTypeProfiler:
                  cluster_n: int):
         self.kmeans = KMeans(n_clusters=cluster_n,
                              verbose=2)
-        self.affinity_propagation = AffinityPropagation(verbose=2)
-        self.agglomerative_clustering = AgglomerativeClustering(n_clusters=cluster_n)
+        # self.affinity_propagation = AffinityPropagation(verbose=2)
+        # self.agglomerative_clustering = AgglomerativeClustering(n_clusters=cluster_n)
 
     def train(self,
               x: pd.DataFrame):
         self.kmeans.fit(x)
-        self.affinity_propagation.fit(x)
-        self.agglomerative_clustering.fit(x)
+        # self.affinity_propagation.fit(x)
+        # self.agglomerative_clustering.fit(x)
 
     def test(self,
              x: pd.DataFrame,
-             y: pd.Series):
+             y: list):
         models_tests = {
             "kmeans": self.kmeans,
-            "affinity_propagation": self.kmeans,
-            "agglomerative_clustering": self.agglomerative_clustering,
+            # "affinity_propagation": self.kmeans,
+            # "agglomerative_clustering": self.agglomerative_clustering,
         }
         answer = {}
-        for name, model in models_tests:
+        for name, model in models_tests.items():
             y_pred = model.predict(x)
             # find best match between two vectors
             cm = confusion_matrix(y, y_pred)
@@ -56,11 +56,11 @@ class ResearchTypeProfiler:
             mapper = {index: js[index] for index in range(len(js))}
             y_pred_match = [mapper[val] for val in list(y_pred)]
             answer[name] = {
-                "y_pred": y_pred,
-                "acc": np.trace(cm) / np.sum(cm),
-                "recall": recall_score(y_pred=y_pred_match, y_true=y),
-                "precision": precision_score(y_pred=y_pred_match, y_true=y),
-                "f1": f1_score(y_pred=y_pred_match, y_true=y)
+                "y_pred": [int(val) for val in list(y_pred)],
+                "acc": float(np.trace(cm) / np.sum(cm)),
+                "recall": float(recall_score(y_pred=y_pred_match, y_true=y)),
+                "precision": float(precision_score(y_pred=y_pred_match, y_true=y)),
+                "f1": float(f1_score(y_pred=y_pred_match, y_true=y))
             }
         return answer
 
