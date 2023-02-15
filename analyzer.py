@@ -26,6 +26,11 @@ class Analyzer:
         with open(data_path, "r") as data_file:
             self.data = json.load(data_file)
 
+    def query_count(self,
+                    min_papers_count: int = 1,
+                    max_papers_count: int = 9999):
+        return {key: sum(list(value.values())) for key, value in self.data.items() if min_papers_count <= sum(list(value.values())) <= max_papers_count}
+
     def author_journals_count(self,
                               plot_save_path: str,
                               plot_save_zoom_path: str,

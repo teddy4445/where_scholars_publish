@@ -1,6 +1,6 @@
 # library imports
 import os
-import json
+import numpy as np
 
 # project imports
 from consts import *
@@ -52,6 +52,9 @@ class Main:
         # prepare analyzer from data file
         print("Main.analyze - loading main data file")
         analyzer = Analyzer(data_path=Main.main_data_path)
+        counts = analyzer.query_count()
+        print("Total researchers: {} with {} manuscripts in total".format(len(counts), sum(counts.values())))
+        print("Author publish {:.3f} +- {:.3f} papers".format(np.mean(list(counts.values())), np.std(list(counts.values()))))
 
         """
         # run several analysis tasks with plots #
