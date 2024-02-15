@@ -59,7 +59,7 @@ class Analyzer:
         """
         try:
             picked_author_dict = self.data[author_name]
-            data_as_list = [(name, count) for name, count in picked_author_dict.items()]
+            data_as_list = [(name, count) for name, count in picked_author_dict.items() if name != "corr"]
             data_as_list = sorted(data_as_list,
                                   key=lambda x: x[1],
                                   reverse=True)
@@ -74,7 +74,7 @@ class Analyzer:
                                    y_fit=fit_funcs[best_func](np.asarray(x), *params),
                                    fit_label="$y = {} | R^2={:.3f}$".format(fit_string_funcs[best_func].format(*params),
                                                                             best_r2),
-                                   x_label="Journals",
+                                   x_label="Journals (sorted by publication count)",
                                    y_label="Counts",
                                    author_name=author_name.title(),
                                    x_names=[val[0] for val in data_as_list],

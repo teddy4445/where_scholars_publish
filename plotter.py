@@ -110,9 +110,11 @@ class Plotter:
                  color="blue",
                  label="Data")
 
+        """
         plt.text(x=1,
                  y=max(y) + 0.5,
                  s=author_name)
+        """
 
         if type(y_fit) in [list, np.array, np.ndarray] and len(y_fit) == len(x):
             plt.plot(x,
@@ -124,7 +126,8 @@ class Plotter:
         plt.xlabel(x_label, fontsize=14)
         plt.ylabel(y_label, fontsize=14)
         if isinstance(x_names, list) and len(x_names) == len(x):
-            plt.xticks(x, x_names, fontsize=10, rotation=45)
+            #plt.xticks(x, x_names, fontsize=10, rotation=45)
+            plt.xticks([])
         if isinstance(ylim, tuple) and len(ylim) == 2:
             plt.ylim(ylim[0], ylim[1])
         if isinstance(xlim, tuple) and len(xlim) == 2:
@@ -133,6 +136,8 @@ class Plotter:
                  axis="y",
                  color="black")
         plt.legend()
+        ax = plt.gca()
+        ax.spines[['right', 'top']].set_visible(False)
         plt.tight_layout()
         plt.savefig(save_path, dpi=300)
         plt.close()

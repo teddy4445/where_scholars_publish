@@ -60,6 +60,8 @@ class DLPBdataLoader:
         # Update the dict as needed by count the numbers
         answer = {}
         connections = 0
+        journal_list = set()
+        author_list = set()
 
         in_article_lines = ["<object>"]
         # start clock
@@ -92,8 +94,10 @@ class DLPBdataLoader:
                         if published_at is None:
                             published_at = object_tree.find(DLPB_TYPES[1])
                         published_at = published_at.text.strip().lower()
+                        journal_list.add(published_at)
                         for author_obj in object_tree.find_all("author"):
                             author_text = re.search("[a-zA-Z\s]+", author_obj.text)[0].strip().lower()
+                            author_list.add(author_text)
                             try:
                                 # check if we have this author
                                 answer[author_text]
@@ -126,3 +130,11 @@ class DLPBdataLoader:
         print("DLPBdataLoader.run: analyzed data and save to {}".format(save_path))
         with open(save_path, "w") as answer_file:
             json.dump(answer, answer_file)
+
+        print("DLPBdataLoader.run: journal list to {}".format("journal_list.txt"))
+        with open("journal_list.txt", "w") as answer_file:
+            json.dump(list(journal_list), answer_file)
+
+        print("DLPBdataLoader.run: journal list to {}".format("author_list.txt"))
+        with open("author_list.txt", "w") as answer_file:
+            json.dump(list(author_list), answer_file)

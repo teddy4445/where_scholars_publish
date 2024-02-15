@@ -52,11 +52,17 @@ class Main:
         # prepare analyzer from data file
         print("Main.analyze - loading main data file")
         analyzer = Analyzer(data_path=Main.main_data_path)
-        counts = analyzer.query_count()
+        counts = analyzer.query_count(min_papers_count=5)
         print("Total researchers: {} with {} manuscripts in total".format(len(counts), sum(counts.values())))
         print("Author publish {:.3f} +- {:.3f} papers".format(np.mean(list(counts.values())), np.std(list(counts.values()))))
 
-        """
+        print("Main.analyze - working on personal graphs (analyzer.author_journal_dist)")
+        for author_name in ["ariel rosenfeld", "teddy lazebnik"]:
+            analyzer.author_journal_dist(author_name=author_name,
+                                         plot_save_path=os.path.join(os.path.dirname(__file__),
+                                                                     RESULTS_FOLDER,
+                                                                     "author_journal_dist_{}.pdf".format(author_name)))
+
         # run several analysis tasks with plots #
         print("Main.analyze - working on analyzer.author_journals_count")
         analyzer.author_journals_count(plot_save_path=os.path.join(os.path.dirname(__file__),
@@ -65,15 +71,6 @@ class Main:
                                        plot_save_zoom_path=os.path.join(os.path.dirname(__file__),
                                                                         RESULTS_FOLDER,
                                                                         "author_journals_count_zoom.pdf"))
-
-        print("Main.analyze - working on personal graphs (analyzer.author_journal_dist)")
-        for author_name in ["ariel rosenfeld", "teddy lazebnik", "ariel alexi",
-                            "gaddi blumrosen", "svetlana bunimovich", "arriel benis",
-                            "stephan beck", "yoav goldberg", "avi rosenfeld"]:
-            analyzer.author_journal_dist(author_name=author_name,
-                                         plot_save_path=os.path.join(os.path.dirname(__file__),
-                                                                     RESULTS_FOLDER,
-                                                                     "author_journal_dist_{}.pdf".format(author_name)))
 
         min_journal_count = 5
         min_r2_score = 0.3
@@ -107,7 +104,6 @@ class Main:
         Analyzer.profile_author_journal_r2_dist(data_path=author_journal_json_path,
                                                 folder_save_path=os.path.join(os.path.dirname(__file__),
                                                                               RESULTS_FOLDER))
-        """
 
         print("Main.analyze - working on analyzer.cluster_author_journal")
         analyzer.cluster_author_journal(test_names=["ariel rosenfeld",  "avi rosenfeld", "gaddi blumrosen", "svetlana bunimovich", "teddy lazebnik", "ariel alexi"],
