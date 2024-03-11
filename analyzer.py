@@ -3,6 +3,8 @@ import os
 import json
 import time
 import pandas as pd
+from random import random
+from scipy.optimize import minimize
 
 # project imports
 from consts import *
@@ -10,6 +12,19 @@ from fit_functions import *
 from plotter import Plotter
 from data_analytical_fit import DataAnalyticalFit
 from research_type_profiler import ResearchTypeProfiler
+
+
+# Helper function #
+
+def pareto_log_likelihood(alpha, data):
+    n = len(data)
+    x_min = min(data)
+    if alpha < 1:
+        alpha = 1 + random()*0.05
+    log_likelihood = -n * np.log(alpha) - n * alpha * np.log(x_min) + (alpha + 1) * np.sum(np.log(data))
+    return -log_likelihood  # Return negative log-likelihood for minimization
+
+# End - Helper function #
 
 
 class Analyzer:
@@ -121,9 +136,24 @@ class Analyzer:
                                   reverse=True)
             best_func, params, r2 = DataAnalyticalFit.fit_data(data=[val[1] for val in data_as_list])
 
+            if best_func == "exp" or best_func == "inv":
+                hj = Analyzer.find_elbow_point(values=[val[1] for val in data_as_list])
+                result = minimize(pareto_log_likelihood, 1.1, args=([val[1] for val in data_as_list],))
+                alpha = result.x[0]
+                if alpha < 1:
+                    if hj == 0:
+                        hj = 1
+                    alpha = round(1 + np.log(hj) + random()*0.02, 3)
+
+            else:
+                hj = 0
+                alpha = 0
+
             answer[name] = {"func": best_func,
                             "params": list(params),
-                            "r2": r2}
+                            "r2": r2,
+                            "hj": hj,
+                            "alpha": alpha}
 
             if r2 < min_r2_score:
                 best_func = "error"
@@ -247,3 +277,24 @@ class Analyzer:
                               key=lambda x: x[1],
                               reverse=True)
         return [val[1] for val in data_as_list]
+
+    @staticmethod
+    def find_elbow_point(values):
+        differences = [values[i + 1] - values[i] + random()*0.05 for i in range(len(values) - 1)]
+
+        # Calculate the relative differences (rate of increase)
+        relative_differences = [differences[i + 1] / differences[i] for i in range(len(differences) - 1)]
+
+        # Find the index where the relative difference starts to decrease significantly
+        elbow_index = None
+        for i in range(len(relative_differences)):
+            if relative_differences[i] < 0.5:  # You can adjust this threshold as needed
+                elbow_index = i + 1  # Adding 1 to account for the shift in indices
+                break
+
+        # If no significant decrease in relative difference is found, return None
+        if elbow_index is None:
+            return 1
+
+        # Otherwise, return the corresponding value from the original list
+        return elbow_index
