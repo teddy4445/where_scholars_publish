@@ -64,13 +64,14 @@ class Main:
                                                                      "author_journal_dist_{}.pdf".format(author_name)))
 
         # run several analysis tasks with plots #
-        print("Main.analyze - working on analyzer.author_journals_count")
-        analyzer.author_journals_count(plot_save_path=os.path.join(os.path.dirname(__file__),
-                                                                   RESULTS_FOLDER,
-                                                                   "author_journals_count.pdf"),
-                                       plot_save_zoom_path=os.path.join(os.path.dirname(__file__),
-                                                                        RESULTS_FOLDER,
-                                                                        "author_journals_count_zoom.pdf"))
+        if False:
+            print("Main.analyze - working on analyzer.author_journals_count")
+            analyzer.author_journals_count(plot_save_path=os.path.join(os.path.dirname(__file__),
+                                                                       RESULTS_FOLDER,
+                                                                       "author_journals_count.pdf"),
+                                           plot_save_zoom_path=os.path.join(os.path.dirname(__file__),
+                                                                            RESULTS_FOLDER,
+                                                                            "author_journals_count_zoom.pdf"))
 
         min_journal_count = 5
         min_r2_score = 0.3
