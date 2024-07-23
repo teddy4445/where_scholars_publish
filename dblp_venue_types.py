@@ -425,26 +425,29 @@ class DBLP_venues:
             if picked_author_dict['func'] != 'exp' and picked_author_dict['func'] != 'inv':
                 continue
             num_home_journals = picked_author_dict['hj']
+            if (num_home_journals>=5):
+                continue
             if not num_home_journals in home_journals_dist.keys():
                 home_journals_dist[num_home_journals]=0
             home_journals_dist[num_home_journals]+=1
         for k,v in home_journals_dist.items():
             print(k,v)
+
         Plotter.bar_std(x=list(home_journals_dist.keys()),
                         y=[val for val in home_journals_dist.values()],
                         y_err=None,
                         x_label="Home Venues",
                         y_label="Number of Scholars",
                         x_names=list(home_journals_dist.keys()),
-                        save_path=os.path.join("home_venues_dist.pdf"))
+                        save_path=os.path.join("home_venues_dist.pdf"), grid=True)
 
 
 
 if __name__ == '__main__':
     dblp_venues = DBLP_venues()
     # journals_list=os.path.join(dblp_venues.path, 'home_journals_list')
-    dblp_venues.author_journals_pareto()
-    dblp_venues.author_conf_pareto()
+    # dblp_venues.author_journals_pareto()
+    # dblp_venues.author_conf_pareto()
     # dblp_venues.match_to_JIF()
     # dblp_venues.extract_catogries_from_jcr()
     # dblp_venues.match_to_scimago()
