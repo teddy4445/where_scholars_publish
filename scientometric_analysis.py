@@ -146,23 +146,26 @@ class Scientometrics:
         # fig.supylabel('Probability')
 
         ax = plt.subplot(111)
-        plt.hist([df1, df2], bins=40, label=['One', 'Two or more'], color=['b','c'], density=True)
+        plt.hist([df1, df2], bins=40, label=['One', 'Two or more'], color=['#1010ff','#108810'], density=True)
         # plt.hist(df1, alpha=0.5, label='One', bins=40, color='blue',density=True)
         # plt.hist(df2, alpha=0.5, label='Two or more', bins=40, color='green',density=True)
         # plt.yticks(fontsize=16)
         # plt.xticks(fontsize=16)
+        plt.xlabel('H-index', fontsize=36, fontdict={'weight': 'bold'})
+        plt.ylabel('Probability', fontsize=36, fontdict={'weight': 'bold'})
+        plt.tick_params(axis='both', which='major', labelsize=24)
+
         plt.grid()
         ax.spines[['right', 'top']].set_visible(False)
 
         # plt.title('H index Distribution by number of Home Venues')
-        plt.xlabel('H index')
-        plt.ylabel('Probability')
 
         # add legend
-        plt.legend(title='Num Home Venues')
+        plt.legend(title='Num Home Venues', title_fontsize='24', fontsize=24)
 
-        # plt.show()
-        plt.savefig(save_path, dpi=300)
+        plt.show()
+        # plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
     def plot_num_papers_with_hv_2_groups(self,save_path):
@@ -185,7 +188,7 @@ class Scientometrics:
         # fig.supylabel('Probability')
 
         ax = plt.subplot(111)
-        plt.hist([df1, df2], bins=40, label=['One', 'Two or more'], color=['b','c'], density=True)
+        plt.hist([df1, df2], bins=40, label=['One', 'Two or more'], color=['#1010ff','#108810'], density=True)
         # plt.hist(df1, alpha=0.5, label='One', bins=40, color='blue', density=True)
         # plt.hist(df2, alpha=0.5, label='Two or more', bins=40, color='green', density=True)
         plt.grid()
@@ -195,14 +198,16 @@ class Scientometrics:
         # plt.hist(df2, alpha=0.5, label='Two or more', bins=40, color='green',density=True)
 
         # plt.title('Num papers Distribution by number of Home Venues')
-        plt.xlabel('Num papers')
-        plt.ylabel('Probability')
+        plt.xlabel('Num papers', fontsize=36, fontdict={'weight': 'bold'})
+        plt.ylabel('Probability', fontsize=36, fontdict={'weight': 'bold'})
+        plt.tick_params(axis='both', which='major', labelsize=24)
 
         # add legend
-        plt.legend(title='Num Home Venues')
+        plt.legend(title='Num Home Venues', title_fontsize='24', fontsize=24)
 
-        # plt.show()
-        plt.savefig(save_path, dpi=300)
+        plt.show()
+        # plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
     def h_index_single_hv_dist_by_type(self):
@@ -272,22 +277,25 @@ class Scientometrics:
         # plt.title('H index Distribution by number of Home Journals')
         # fig.supxlabel('H-index')
         # fig.supylabel('Probability')
+
         ax = plt.subplot(111)
-        plt.hist([df1, df2,df3], bins=40, label=['Journals', 'Conferences','Other'], color=['b','c','g'], density=True)
+        plt.hist([df1, df2,df3], bins=40, label=['Journals', 'Conferences','Other'], color=['#1010ff','#108810','#ff1f1f'], density=True)
 
         # plt.hist(df1, alpha=0.5, label='Journals', bins=40, color='blue', density=True)
         # plt.hist(df2, alpha=0.5, label='Conferences', bins=40, color='green', density=True)
         # plt.hist(df3, alpha=0.5, label='Other', bins=40, color='yellow', density=True)
         plt.grid()
         ax.spines[['right', 'top']].set_visible(False)
+        plt.xlabel('H-index', fontsize=36, fontdict={'weight': 'bold'})
+        plt.ylabel('Probability', fontsize=36, fontdict={'weight': 'bold'})
+        plt.tick_params(axis='both', which='major', labelsize=24)
 
-        plt.xlabel('H-index')
-        plt.ylabel('Probability')
+        plt.legend(title='Home venue type', title_fontsize='24', fontsize=24)
 
-        plt.legend(title='Home venue type')
 
-        # plt.show()
-        plt.savefig(save_path, dpi=300)
+        plt.show()
+        # plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
     def num_papers_plot_single_hv_dist_by_type(self,save_path):
@@ -314,7 +322,7 @@ class Scientometrics:
         # fig.supylabel('Probability')
 
         ax = plt.subplot(111)
-        plt.hist([df1, df2,df3], bins=40, label=['Journals', 'Conferences','Other'], color=['b','c','g'], density=True)
+        plt.hist([df1, df2,df3], bins=40, label=['Journals', 'Conferences','Other'], color=['#1010ff','#108810','#ff1f1f'], density=True)
 
         # plt.hist(df1, alpha=0.5, label='Journals', bins=40, color='blue', density=True)
         # plt.hist(df2, alpha=0.5, label='Conferences', bins=40, color='green', density=True)
@@ -322,13 +330,15 @@ class Scientometrics:
         plt.grid()
         ax.spines[['right', 'top']].set_visible(False)
 
-        plt.xlabel('Num papers')
-        plt.ylabel('Probability')
+        plt.xlabel('Num papers', fontsize=36, fontdict={'weight': 'bold'})
+        plt.ylabel('Probability', fontsize=36, fontdict={'weight': 'bold'})
+        plt.tick_params(axis='both', which='major', labelsize=24)
 
-        plt.legend(title='Home venue type')
+        plt.legend(title='Home venue type', title_fontsize='24', fontsize=24)
 
-        # plt.show()
-        plt.savefig(save_path, dpi=300)
+        plt.show()
+        # plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
 
@@ -431,14 +441,16 @@ class Scientometrics:
         o=np.array(other)
         m=np.array(mixed)
         x=['1','2','3','4']
-        plt.bar(x, j, color='b')
-        plt.bar(x, c, bottom=j, color='g')
-        plt.bar(x, o, bottom=j + c, color='r')
-        plt.bar(x, m, bottom=j + c + other, color='m')
-        plt.xlabel("Number of home venues")
-        plt.ylabel("Number of scholars")
+        plt.bar(x, j, color='#1010ff')
+        plt.bar(x, c, bottom=j, color='#108810')
+        plt.bar(x, o, bottom=j + c, color='#ff1f1f')
+        plt.bar(x, m, bottom=j + c + other, color='#ffaa00')
+
+
+        plt.xlabel("Number of home venues",fontdict={'weight': 'bold'})
+        plt.ylabel("Number of scholars", fontdict={'weight': 'bold'})
         plt.legend(["Journals", "Conferences", "Other", "Mixed"])
-        plt.grid(axis='y')
+        plt.grid(axis='y', alpha=0.5)
         ax.spines[['right', 'top']].set_visible(False)
 
         # plt.title("Scores by Teams in 4 Rounds")
@@ -453,6 +465,7 @@ class Scientometrics:
         # plt.xticks(['Journals','Conferences','Other','Mixed'])
         # plt.show()
         plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
     def h_index_plot_multi_hv_dist_by_type(self,save_path):
@@ -483,7 +496,7 @@ class Scientometrics:
         # fig.supxlabel('H-index')
         # fig.supylabel('Probability')
         ax = plt.subplot(111)
-        plt.hist([df1, df2,df3,df4], bins=40, label=['Journals', 'Conferences','Other','Mixed'], color=['b','c','g','m'], density=True)
+        plt.hist([df1, df2,df3,df4], bins=40, label=['Journals', 'Conferences','Other','Mixed'], color=['#1010ff','#108810','#ff1f1f','#ffaa00'], density=True)
         # plt.hist(df1, alpha=0.5, label='Journals', bins=40, color='blue', density=True)
         # plt.hist(df2, alpha=0.5, label='Conferences', bins=40, color='green', density=True)
         # plt.hist(df3, alpha=0.5, label='Other', bins=40, color='yellow', density=True)
@@ -492,13 +505,15 @@ class Scientometrics:
         plt.grid()
         ax.spines[['right', 'top']].set_visible(False)
 
-        plt.xlabel('H-index')
-        plt.ylabel('Probability')
+        plt.xlabel('H-index', fontsize=36, fontdict={'weight': 'bold'})
+        plt.ylabel('Probability', fontsize=36, fontdict={'weight': 'bold'})
+        plt.tick_params(axis='both', which='major', labelsize=24)
 
-        plt.legend(title='Home venue type')
+        plt.legend(title='Home venue type', title_fontsize='24', fontsize=24)
 
-        # plt.show()
-        plt.savefig(save_path, dpi=300)
+        plt.show()
+        # plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
     def num_papers_plot_multi_hv_dist_by_type(self,save_path):
@@ -529,7 +544,7 @@ class Scientometrics:
         # fig.supxlabel('Num papers')
         # fig.supylabel('Probability')
         ax = plt.subplot(111)
-        plt.hist([df1, df2,df3,df4], bins=40, label=['Journals', 'Conferences','Other','Mixed'], color=['b','c','g','m'], density=True)
+        plt.hist([df1, df2,df3,df4], bins=40, label=['Journals', 'Conferences','Other','Mixed'], color=['#1010ff','#108810','#ff1f1f','#ffaa00'], density=True)
         # plt.hist(df1, alpha=0.5, label='Journals', bins=40, color='blue', density=True)
         # plt.hist(df2, alpha=0.5, label='Conferences', bins=40, color='green', density=True)
         # plt.hist(df3, alpha=0.5, label='Other', bins=40, color='yellow', density=True)
@@ -538,13 +553,16 @@ class Scientometrics:
         plt.grid()
         ax.spines[['right', 'top']].set_visible(False)
 
-        plt.xlabel('Num papers')
-        plt.ylabel('Probability')
+        plt.xlabel('Num papers', fontsize=36, fontdict={'weight': 'bold'})
+        plt.ylabel('Probability', fontsize=36, fontdict={'weight': 'bold'})
+        plt.tick_params(axis='both', which='major', labelsize=24)
 
-        plt.legend(title='Home venue type')
+        plt.legend(title='Home venue type', title_fontsize='24', fontsize=24)
 
-        # plt.show()
-        plt.savefig(save_path, dpi=300)
+
+        plt.show()
+        # plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
     def one_HJ_h_index_Q_value(self):
@@ -579,16 +597,20 @@ class Scientometrics:
             count = df1['jif_q_vals'].isnull().sum()
             df2 = df1[df1['jif_q_vals'].notnull()]
             df2['jif_q_vals']=pd.to_numeric(df2['jif_q_vals'])
-
             fig, ax = plt.subplots()
-            boxplot = sns.boxplot(x='jif_q_vals', y='h-index',  data=df2, hue='jif_q_vals', palette=['b','c','g','m'], showfliers=False, showmeans=True,
-                                  native_scale=True, ax=ax)
-            boxplot.set(xticks=[1,2,3,4],xlabel='Q ranks',ylabel='H-index')
+            boxplot = sns.boxplot(x='jif_q_vals', y='h-index',  data=df2, hue='jif_q_vals', palette=['#1010ff','#108810','#ff1f1f','#ffaa00'], showfliers=False, showmeans=True,
+                                  native_scale=True, ax=ax, meanprops={"markerfacecolor":"black", "markeredgecolor":"black"})
+            boxplot.set(xticks=[1,2,3,4], yticks=[10,20,30,40,50])
             # ax.set_title("H-index distribution by quantile ranking, single home journal")
+            plt.grid(axis='y', alpha=0.5)
+            ax.spines[['right', 'top']].set_visible(False)
+            plt.xlabel('Q ranks', fontsize=36, fontdict={'weight': 'bold'})
+            plt.ylabel('H-index', fontsize=36, fontdict={'weight': 'bold'})
+            plt.tick_params(axis='both', which='major', labelsize=24)
+            plt.show()
 
-            # plt.show()
-
-            plt.savefig(save_path, dpi=300)
+            # boxplot.get_figure().savefig(save_path, dpi=300)
+            plt.close()
 
 
 
@@ -625,14 +647,20 @@ class Scientometrics:
         df2 = df1[df1['jif_q_vals'].notnull()]
         df2['jif_q_vals'] = pd.to_numeric(df2['jif_q_vals'])
 
-        boxplot = sns.boxplot(x='jif_q_vals', y='num papers', data=df2, hue='jif_q_vals', palette=['b','c','g','m'], showfliers=False,
-                         showmeans=True, native_scale=True,
+        fig, ax = plt.subplots()
+        boxplot = sns.boxplot(x='jif_q_vals', y='num papers', data=df2, hue='jif_q_vals', palette=['#1010ff','#108810','#ff1f1f','#ffaa00'], showfliers=False,
+                         showmeans=True, native_scale=True, meanprops={"markerfacecolor":"black", "markeredgecolor":"black"}
                          )
-        boxplot.set(xticks=[1, 2, 3, 4], xlabel='Q ranks', ylabel='Num papers')
+        boxplot.set(xticks=[1, 2, 3, 4], yticks=[10,20,30,40,50,60,70,80, 90])
         # ax.set_title("Number of papers distribution by quantile ranking, single home journal")
-
-        # plt.show()
-        boxplot.get_figure().savefig(save_path, dpi=300)
+        plt.xlabel('Q ranks', fontsize=36, fontdict={'weight': 'bold'})
+        plt.ylabel('Num papers', fontsize=36, fontdict={'weight': 'bold'})
+        plt.tick_params(axis='both', which='major', labelsize=24)
+        plt.grid(axis='y', alpha=0.5)
+        ax.spines[['right', 'top']].set_visible(False)
+        plt.show()
+        # boxplot.get_figure().savefig(save_path, dpi=300)
+        plt.close()
 
     def multi_HJ_h_index_Q_value(self):
         df = self.df[self.df['h-index'] <= 80]
@@ -670,15 +698,22 @@ class Scientometrics:
             df2.loc[df2['jif_q_vals'].str.startswith('3'), 'first_jif_q_vals'] = 3
             df2.loc[df2['jif_q_vals'].str.startswith('4'), 'first_jif_q_vals'] = 4
 
-            boxplot = sns.boxplot(x='first_jif_q_vals', y='h-index',  data=df2, hue='first_jif_q_vals', palette=['b','c','g','m'], showfliers=False, showmeans=True,native_scale=True,
+            fig, ax = plt.subplots()
+            boxplot = sns.boxplot(x='first_jif_q_vals', y='h-index',  data=df2, hue='first_jif_q_vals', palette=['#1010ff','#108810','#ff1f1f','#ffaa00'],
+                                  showfliers=False, showmeans=True,native_scale=True, meanprops={"markerfacecolor":"black", "markeredgecolor":"black"}
                              )
-            boxplot.set(xticks=[1,2,3,4],xlabel='Q ranks',ylabel='H-index')
+            boxplot.set(xticks=[1,2,3,4], yticks=[10,20,30,40,50])
             # ax.set_title("H-index distribution by quantile ranking, multiple home journals")
+            plt.xlabel('Q ranks', fontsize=36, fontdict={'weight': 'bold'})
+            plt.ylabel('H-index', fontsize=36, fontdict={'weight': 'bold'})
+            plt.tick_params(axis='both', which='major', labelsize=24)
+
+            plt.grid(axis='y', alpha=0.5)
+            ax.spines[['right', 'top']].set_visible(False)
 
             plt.show()
-            boxplot.get_figure().savefig(save_path, dpi=300)
-
-
+            # boxplot.get_figure().savefig(save_path, dpi=300)
+            plt.close()
 
     def multi_HJ_num_papers_Q_value(self):
         df = self.df[self.df['num papers'] <= 300]
@@ -716,14 +751,23 @@ class Scientometrics:
         df2.loc[df2['jif_q_vals'].str.startswith('3'), 'first_jif_q_vals'] = 3
         df2.loc[df2['jif_q_vals'].str.startswith('4'), 'first_jif_q_vals'] = 4
 
-        boxplot = sns.boxplot(x='first_jif_q_vals', y='num papers', data=df2, hue='first_jif_q_vals', palette=['b','c','g','m'],
-                         showfliers=False, showmeans=True, native_scale=True,
+        fig, ax = plt.subplots()
+        boxplot = sns.boxplot(x='first_jif_q_vals', y='num papers', data=df2, hue='first_jif_q_vals', palette=['#1010ff','#108810','#ff1f1f','#ffaa00'],
+                         showfliers=False, showmeans=True, native_scale=True, meanprops={"markerfacecolor":"black", "markeredgecolor":"black"}
                          )
-        boxplot.set(xticks=[1, 2, 3, 4], xlabel='Q ranks', ylabel='Num papers')
+        boxplot.set(xticks=[1, 2, 3, 4], yticks=[10,20,30,40,50,60,70,80,90])
         # ax.set_title("Number of papers distribution by quantile ranking, multiple home journals")
+        plt.xlabel('Q ranks', fontsize=36, fontdict={'weight': 'bold'})
+        plt.ylabel('Num papers', fontsize=36, fontdict={'weight': 'bold'})
+        plt.tick_params(axis='both', which='major', labelsize=24)
+
+        plt.grid(axis='y', alpha=0.5)
+        ax.spines[['right', 'top']].set_visible(False)
 
         plt.show()
-        boxplot.get_figure().savefig(save_path, dpi=300)
+        # boxplot.get_figure().savefig(save_path, dpi=300)
+        plt.close()
+
 
     def chi_square_ranks_dist(self):
         df1=self.ranks_df[['Number of Journals','Number of Scholars with Single HJ']]
@@ -792,6 +836,7 @@ class Scientometrics:
         # sns.heatmap(heatmap_data, columns=num_hjs,  annot=True)
         # plt.show()
         plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
     def match_h_index_to_type_hj_with_IF(self):
@@ -958,6 +1003,7 @@ class Scientometrics:
         # sns.heatmap(heatmap_data, columns=num_hjs,  annot=True)
         # plt.show()
         plt.savefig(save_path, dpi=300)
+        plt.close()
 
 
 
@@ -966,7 +1012,7 @@ class Scientometrics:
 if __name__ == '__main__':
     sci=Scientometrics()
     # sci.basic_stats()
-    sci.plot_multi_hv_dist_by_type(save_path=os.path.join(sci.path,"vis/home_venues_dist.pdf"))
+    # sci.plot_multi_hv_dist_by_type(save_path=os.path.join(sci.path,"vis/home_venues_dist.pdf"))
     # sci.match_h_index_to_num_hv()
     # sci.plot_h_index()
     # sci.plot_h_index_with_hv()
@@ -990,7 +1036,7 @@ if __name__ == '__main__':
     # sci.one_HJ_num_papers_Q_value()
     # sci.plot_one_HJ_num_papers_q_value(save_path=os.path.join('.',"num papers by Q rank single HJ boxplots.pdf"))
     # sci.multi_HJ_h_index_Q_value()
-    # sci.plot_multi_HJ_h_index_q_value(save_path=os.path.join('.',"h index by Q rank multi HJ boxplots.pdf"))
+    sci.plot_multi_HJ_h_index_q_value(save_path=os.path.join('.',"h index by Q rank multi HJ boxplots.pdf"))
     # sci.multi_HJ_num_papers_Q_value()
-    # sci.plot_multi_HJ_num_papers_q_value(save_path=os.path.join('.',"num papers by Q rank multi HJ boxplots.pdf"))
+    sci.plot_multi_HJ_num_papers_q_value(save_path=os.path.join('.',"num papers by Q rank multi HJ boxplots.pdf"))
     # sci.chi_square_ranks_dist()
